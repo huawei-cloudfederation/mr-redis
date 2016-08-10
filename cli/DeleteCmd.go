@@ -44,7 +44,7 @@ func DeleteCmd(c *cli.Context) {
 		fmt.Printf("Instance Deletion initated..\n")
 
 	} else {
-		fmt.Printf("Error Creating the instance response = %v\n", res)
+		fmt.Printf("Error Deleting the instance response = %v\n", res)
 	}
 
 }

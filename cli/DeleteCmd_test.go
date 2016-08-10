@@ -4,7 +4,7 @@ import (
         "net/http"
         "net/http/httptest"
 	"fmt"	
-	"strings"
+//	"strings"
         "testing"
 	 "github.com/codegangsta/cli"
 	"flag"
@@ -28,26 +28,6 @@ func TestDelete(T *testing.T) {
         }
 }
 
-//delete with invalid input
-func TestDeleteWithInvalidURL(T *testing.T) {
-
-
-        url := "https://10.11.12.13:5656/v1/DELETE/TestInstance" 
-
-        _,err := httpDelete(url)
-
-        if err == nil {
-                //no error should occur
-                T.Fail()
-        }
-
-	 if !strings.Contains(err.Error(), "dial tcp 10.11.12.13:5656: i/o timeout") {
-                //If its some other error then fail
-                T.Fail()
-        }
-
-}
-
 //delete command  with valid input
 func TestDeleteCmd(T *testing.T) {
 	 ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +46,11 @@ func TestDeleteCmd(T *testing.T) {
 }
 
 //delete command  with server error 
-func TestDeleteCmdWithServerError(T *testing.T) {
+func TestDeleteCmdWithBadServer(T *testing.T) {
+
+	 url := "https://10.11.12.13:5656"
+
+        MrRedisFW = url 
 	set := flag.NewFlagSet("name", 0)
 	set.String("name", "TestInstance","doc")
 	c := cli.NewContext(nil, set, nil)
@@ -77,6 +61,13 @@ func TestDeleteCmdWithServerError(T *testing.T) {
 
 //delete command  with empty input
 func TestDeleteCmdWithEmptyName(T *testing.T) {
+	  ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(404)
+                fmt.Fprintln(w, "A-OK")
+        }))
+	
+	 MrRedisFW = ts.URL
+
         set := flag.NewFlagSet("name", 0)
         set.String("name", "","doc")
         c := cli.NewContext(nil, set, nil)

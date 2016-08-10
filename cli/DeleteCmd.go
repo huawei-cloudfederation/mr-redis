@@ -29,7 +29,7 @@ func DeleteCmd(c *cli.Context) {
 	name := c.String("name")
 
 	if name == "" {
-		fmt.Printf("Error: Should have a valid name")
+		fmt.Printf("Error: Should have a valid name\n")
 	}
 
 	url := fmt.Sprintf("%s/v1/DELETE/%s", MrRedisFW, name)
@@ -41,10 +41,10 @@ func DeleteCmd(c *cli.Context) {
 
 	if res.StatusCode == http.StatusOK {
 
-		fmt.Printf("Instance Deletion initated..")
+		fmt.Printf("Instance Deletion initated..\n")
 
 	} else {
-		fmt.Printf("Error Creating the instance response = %v\n", res)
+		fmt.Printf("Error Deleting the instance response = %v\n", res)
 	}
 
 }
